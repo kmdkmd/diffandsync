@@ -2,6 +2,8 @@
 
 Module Utils
 
+#Region "フォルダ関連"
+
     ' フォルダ選択ダイアログを表示
     ' 選択したらテキストボックスにその値をセットする
     Public Function ChooseFolder(ByVal defaultPath As String) As String
@@ -51,6 +53,10 @@ Module Utils
         End If
         Return Nothing
     End Function
+
+#End Region
+
+#Region "ファイル関連"
 
     ' ファイルの存在チェックをしてメッセージを返す
     ' ファイルの存在チェックをしない
@@ -128,5 +134,7 @@ Module Utils
         End Try
         Return Nothing
     End Function
+
+#End Region
 
 End Module

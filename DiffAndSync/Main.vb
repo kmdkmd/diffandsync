@@ -10,6 +10,12 @@ Public Class Main
     Private Const SYNC_CONFIRM_TITLE As String = "同期開始確認"
     Private Const SYNC_CONFIRM_MSG As String = "同期してもいいですか？"
 
+    ' 完了メッセージ
+    Private Const DIFF_FINISH_TITLE As String = "差分取得完了"
+    Private Const DIFF_FINISH_MSG As String = "差分取得が完了しました。"
+    Private Const SYNC_FINISH_TITLE As String = "同期完了"
+    Private Const SYNC_FINISH_MSG As String = "同期が完了しました。"
+
     ' 共通メッセージ
     Private Const CHECK_ERROR_TITLE As String = "エラー"
     Private Const PATH_IS_EMPTY As String = """{0}"" が空です。"
@@ -63,6 +69,11 @@ Public Class Main
         If Not CheckBefore() Then
             Exit Sub
         End If
+        ' 同期処理
+        Dim fc As New FolderSync(LogBox.Text)
+        fc.Execute(FromBox.Text, ToBox.Text)
+        ' 完了メッセージ
+        MsgBox(DIFF_FINISH_MSG, MsgBoxStyle.OkOnly, DIFF_FINISH_TITLE)
     End Sub
 
     Private Sub SyncButton_Click(sender As Object, e As EventArgs) Handles SyncButton.Click
@@ -74,10 +85,18 @@ Public Class Main
         If Not CheckBefore() Then
             Exit Sub
         End If
+        ' 同期処理
+        Dim fc As New FolderSync(LogBox.Text)
+        fc.Execute(FromBox.Text, ToBox.Text)
+        ' 完了メッセージ
+        MsgBox(SYNC_FINISH_MSG, MsgBoxStyle.OkOnly, SYNC_FINISH_TITLE)
     End Sub
 
 #End Region
 
+#Region "実行前チェックメソッド"
+
+    ' 実行前チェック
     Private Function CheckBefore() As Boolean
         ' フォルダ・ファイルのチェック
         Dim errorMsgs As String() = CheckFoldersAndFile()
@@ -153,5 +172,7 @@ Public Class Main
         End If
         Return Nothing
     End Function
+
+#End Region
 
 End Class

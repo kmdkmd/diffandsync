@@ -39,7 +39,6 @@ Partial Class Main
         Me.DiffCreatetimeCheck = New System.Windows.Forms.CheckBox()
         Me.SyncItemGroup = New System.Windows.Forms.GroupBox()
         Me.SyncPurgeCheck = New System.Windows.Forms.CheckBox()
-        Me.SyncModifiedTimeCheck = New System.Windows.Forms.CheckBox()
         Me.SyncCreatedTimeCheck = New System.Windows.Forms.CheckBox()
         Me.StatusLabel = New System.Windows.Forms.Label()
         Me.LogFolderButton = New System.Windows.Forms.Button()
@@ -213,14 +212,13 @@ Partial Class Main
         Me.SyncItemGroup.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.SyncItemGroup.Controls.Add(Me.SyncPurgeCheck)
-        Me.SyncItemGroup.Controls.Add(Me.SyncModifiedTimeCheck)
         Me.SyncItemGroup.Controls.Add(Me.SyncCreatedTimeCheck)
         Me.SyncItemGroup.Location = New System.Drawing.Point(14, 142)
         Me.SyncItemGroup.Name = "SyncItemGroup"
         Me.SyncItemGroup.Size = New System.Drawing.Size(399, 45)
         Me.SyncItemGroup.TabIndex = 19
         Me.SyncItemGroup.TabStop = False
-        Me.SyncItemGroup.Text = "同期属性"
+        Me.SyncItemGroup.Text = "同期"
         '
         'SyncPurgeCheck
         '
@@ -231,18 +229,6 @@ Partial Class Main
         Me.SyncPurgeCheck.TabIndex = 17
         Me.SyncPurgeCheck.Text = "Fromにないファイル・フォルダを削除"
         Me.SyncPurgeCheck.UseVisualStyleBackColor = True
-        '
-        'SyncModifiedTimeCheck
-        '
-        Me.SyncModifiedTimeCheck.AutoSize = True
-        Me.SyncModifiedTimeCheck.Checked = True
-        Me.SyncModifiedTimeCheck.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.SyncModifiedTimeCheck.Location = New System.Drawing.Point(115, 18)
-        Me.SyncModifiedTimeCheck.Name = "SyncModifiedTimeCheck"
-        Me.SyncModifiedTimeCheck.Size = New System.Drawing.Size(72, 16)
-        Me.SyncModifiedTimeCheck.TabIndex = 16
-        Me.SyncModifiedTimeCheck.Text = "更新日時"
-        Me.SyncModifiedTimeCheck.UseVisualStyleBackColor = True
         '
         'SyncCreatedTimeCheck
         '
@@ -374,7 +360,6 @@ Partial Class Main
     Friend WithEvents DiffCreatetimeCheck As System.Windows.Forms.CheckBox
     Friend WithEvents SyncItemGroup As System.Windows.Forms.GroupBox
     Friend WithEvents SyncPurgeCheck As System.Windows.Forms.CheckBox
-    Friend WithEvents SyncModifiedTimeCheck As System.Windows.Forms.CheckBox
     Friend WithEvents SyncCreatedTimeCheck As System.Windows.Forms.CheckBox
     Friend WithEvents StatusLabel As System.Windows.Forms.Label
     Friend WithEvents LogFolderButton As System.Windows.Forms.Button
