@@ -69,8 +69,8 @@ Public Class Main
         If Not CheckBefore() Then
             Exit Sub
         End If
-        ' 同期処理
-        Dim fc As New FolderSync(LogBox.Text)
+        ' 差分取得処理
+        Dim fc As New FolderSync(LogBox.Text, False)
         fc.Execute(FromBox.Text, ToBox.Text)
         ' 完了メッセージ
         MsgBox(DIFF_FINISH_MSG, MsgBoxStyle.OkOnly, DIFF_FINISH_TITLE)
@@ -86,7 +86,7 @@ Public Class Main
             Exit Sub
         End If
         ' 同期処理
-        Dim fc As New FolderSync(LogBox.Text)
+        Dim fc As New FolderSync(LogBox.Text, True)
         fc.Execute(FromBox.Text, ToBox.Text)
         ' 完了メッセージ
         MsgBox(SYNC_FINISH_MSG, MsgBoxStyle.OkOnly, SYNC_FINISH_TITLE)
