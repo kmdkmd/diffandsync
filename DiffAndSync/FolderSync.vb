@@ -8,6 +8,26 @@ Public Class FolderSync
 
 #Region "ログメッセージ"
 
+    ' 作成
+    Private Const CREATED_MSG As String = "{0} : 作成"
+    ' 作成失敗
+    Private Const NOT_CREATED_MSG As String = "{0} : 作成失敗"
+
+    ' 作成完了ディレクトリ数
+    Private Const CREATED_FOLDER_NUM_MSG As String = "作成完了フォルダ数 : {0}"
+    ' 削除失敗フォルダ数
+    Private Const NOT_CREATED_FOLDER_NUM_MSG As String = "作成失敗フォルダ数 : {0}"
+
+    ' 属性コピー
+    Private Const COPIED_ATTR_MSG As String = "{0} : 属性反映"
+    ' 属性コピー失敗
+    Private Const NOT_COPIED_ATTR_MSG As String = "{0} : 属性反映失敗"
+
+    ' 属性コピー完了フォルダ数
+    Private Const COPIED_ATTR_FOLDER_NUM_MSG As String = "属性コピー完了フォルダ数 : {0}"
+    ' 属性コピー失敗フォルダ数
+    Private Const NOT_COPIED_ATTR_FOLDER_NUM_MSG As String = "属性コピー失敗フォルダ数 : {0}"
+
     ' 削除失敗
     Private Const DELETED_MSG As String = "{0} : 削除"
     ' 削除失敗
@@ -27,8 +47,11 @@ Public Class FolderSync
     Private copiedFileNum As Integer = 0
     Private copyErrorFileNum As Integer = 0
 
-    Private copiedFolderNum As Integer = 0
-    Private copyErrorFolderNum As Integer = 0
+    Private createdFolderNum As Integer = 0
+    Private createErrorFolderNum As Integer = 0
+
+    Private copiedFolderAttrNum As Integer = 0
+    Private copyErrorFolderAttrNum As Integer = 0
 
     Private deletedFileNum As Integer = 0
     Private deleteErrorFileNum As Integer = 0
@@ -68,6 +91,10 @@ Public Class FolderSync
             If Not IsNothing(logWriter) Then
                 Try
                     logWriter.WriteLine("同期終了")
+                    logWriter.WriteLine(CREATED_FOLDER_NUM_MSG, createdFolderNum)
+                    logWriter.WriteLine(NOT_CREATED_FOLDER_NUM_MSG, createErrorFolderNum)
+                    logWriter.WriteLine(COPIED_ATTR_FOLDER_NUM_MSG, copiedFolderAttrNum)
+                    logWriter.WriteLine(NOT_COPIED_ATTR_FOLDER_NUM_MSG, copyErrorFolderAttrNum)
                     logWriter.WriteLine(DELETED_FOLDER_NUM_MSG, deletedFolderNum)
                     logWriter.WriteLine(NOT_DELETED_FOLDER_NUM_MSG, deleteErrorFolderNum)
                     logWriter.Close()
@@ -79,11 +106,20 @@ Public Class FolderSync
     End Sub
 
     Private Sub Sync(ByVal fromFolder As String, ByVal toFolder As String)
-        ' Toフォルダの存在確認
+        ' Toフォルダがなければ作成
+        If Not Directory.Exists(toFolder) Then
+            Try
+                Directory.CreateDirectory(toFolder)
+                logWriter.WriteLine(CREATED_MSG, toFolder)
+                createdFolderNum += 1
+            Catch ex As Exception
+                logWriter.WriteLine(NOT_CREATED_MSG, toFolder)
+                createErrorFolderNum += 1
+                Exit Sub
+            End Try
+        End If
 
-        ' 作成日時をセット
-        ' 更新日時をセット
-        ' アクセス日時をセット
+
 
         ' Fromフォルダのファイル一覧取得
         ' Toフォルダのファイル一覧取得
@@ -130,6 +166,27 @@ Public Class FolderSync
 
         ' サブフォルダの同期
         SyncSubFolders(fromFolder, toFolder)
+
+        ' フォルダの属性コピー
+        CopyFolderAttributes(fromFolder, toFolder)
+    End Sub
+
+    ' フォルダ属性、日付をコピー
+    Private Sub CopyFolderAttributes(ByVal fromFolder As String, ByVal toFolder As String)
+        Try
+            ' 属性
+            File.SetAttributes(toFolder, File.GetAttributes(fromFolder))
+            ' 作成日時
+            Directory.SetCreationTime(toFolder, Directory.GetCreationTime(fromFolder))
+            ' 更新日時
+            Directory.SetLastWriteTime(toFolder, Directory.GetCreationTime(fromFolder))
+
+            logWriter.WriteLine(COPIED_ATTR_MSG, toFolder)
+            copiedFolderAttrNum += 1
+        Catch ex As Exception
+            logWriter.WriteLine(NOT_COPIED_ATTR_MSG, toFolder)
+            copyErrorFolderAttrNum += 1
+        End Try
     End Sub
 
     ' サブフォルダの同期

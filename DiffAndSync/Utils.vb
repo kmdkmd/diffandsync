@@ -107,7 +107,7 @@ Module Utils
             Return Nothing
         End If
         ' ファイルが既にある場合は削除するかどうか確認
-        If MsgBox(String.Format(logFileDeleteConfirmMsg, logFolderPath), MsgBoxStyle.OkCancel, logFileDeleteConfirmTitle) <> MsgBoxResult.Ok Then
+        If MsgBox(String.Format(logFileDeleteConfirmMsg, filePath), MsgBoxStyle.OkCancel, logFileDeleteConfirmTitle) <> MsgBoxResult.Ok Then
             ' 拒否の場合はエラー
             Return String.Format(logFileDeleteCanceledMsg, filePath)
         End If
