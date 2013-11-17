@@ -177,6 +177,9 @@ Public Class FolderSync
         ' 不要ファイルの削除
         DeleteFiles(fromFolder, toFolder)
 
+        ' 不要フォルダの削除
+        DeleteFolders(fromFolder, toFolder)
+
         ' ファイルの同期
         SyncFiles(fromFolder, toFolder)
 
@@ -321,6 +324,27 @@ Public Class FolderSync
 
 #Region "フォルダ処理"
 
+    ' Toからフォルダを削除
+    Private Sub DeleteFolders(ByVal fromFolder As String, ByVal toFolder As String)
+        ' Toフォルダのファイルでループ
+        Dim toSubFolders As String() = Directory.GetDirectories(toFolder)
+        For Each toSubFolder As String In toSubFolders
+            ' fromに同名のフォルダがあるか
+            If Directory.Exists(Path.Combine(fromFolder, Path.GetFileName(toSubFolder))) Then
+                Continue For
+            End If
+            ' ない場合はtoのファイルを削除
+            Try
+                My.Computer.FileSystem.DeleteDirectory(toSubFolder, FileIO.UIOption.OnlyErrorDialogs, FileIO.RecycleOption.SendToRecycleBin)
+                logWriter.WriteLine(MSG_COMMON_DELETED, toSubFolder)
+                numFolderDeleted += 1
+            Catch ex As Exception
+                logWriter.WriteLine(MSG_COMMON_FAILED_TO_DELETE, toSubFolder)
+                numFolderFailedToDelete += 1
+            End Try
+        Next
+    End Sub
+
     ' Toフォルダの作成
     Private Sub CreateFolder(ByVal toFolder As String)
         If Directory.Exists(toFolder) Then
@@ -354,30 +378,10 @@ Public Class FolderSync
 
     ' サブフォルダの同期
     Private Sub SyncSubFolders(ByVal fromFolder As String, ByVal toFolder As String)
-        ' Toフォルダのフォルダ一覧取得
-        Dim toSubFolders As List(Of String) = New List(Of String)(Directory.GetDirectories(toFolder))
         ' Fromフォルダのフォルダ一覧取得
         For Each fromSubFolder As String In Directory.GetDirectories(fromFolder)
-            ' Fromのフォルダ名取得
-            Dim toSubFolder As String = Path.Combine(toFolder, Path.GetFileName(fromSubFolder))
             ' 再帰
-            Sync(fromSubFolder, toSubFolder)
-            ' 同期完了したのでToのフォルダリストから削除
-            Dim deleteIndex As Integer = toSubFolders.IndexOf(toSubFolder)
-            If deleteIndex >= 0 Then
-                toSubFolders.RemoveAt(deleteIndex)
-            End If
-        Next
-        ' Toにしかないフォルダを削除
-        For Each toSubFolder As String In toSubFolders
-            Try
-                My.Computer.FileSystem.DeleteDirectory(toSubFolder, FileIO.UIOption.OnlyErrorDialogs, FileIO.RecycleOption.SendToRecycleBin)
-                logWriter.WriteLine(MSG_COMMON_DELETED, toSubFolder)
-                numFolderDeleted += 1
-            Catch ex As Exception
-                logWriter.WriteLine(MSG_COMMON_FAILED_TO_DELETE, toSubFolder)
-                numFolderFailedToDelete += 1
-            End Try
+            Sync(fromSubFolder, Path.Combine(toFolder, Path.GetFileName(fromSubFolder)))
         Next
     End Sub
 
