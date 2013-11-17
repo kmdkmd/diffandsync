@@ -33,9 +33,7 @@ Partial Class Main
         Me.LogBox = New System.Windows.Forms.TextBox()
         Me.LogLabel = New System.Windows.Forms.Label()
         Me.DiffConditionGroup = New System.Windows.Forms.GroupBox()
-        Me.DiffMd5Check = New System.Windows.Forms.CheckBox()
         Me.DiffSizeCheck = New System.Windows.Forms.CheckBox()
-        Me.DiffModifiedTimeCheck = New System.Windows.Forms.CheckBox()
         Me.SyncItemGroup = New System.Windows.Forms.GroupBox()
         Me.SyncPurgeCheck = New System.Windows.Forms.CheckBox()
         Me.SyncCreatedTimeCheck = New System.Windows.Forms.CheckBox()
@@ -45,6 +43,9 @@ Partial Class Main
         Me.CheckMd5Check = New System.Windows.Forms.CheckBox()
         Me.CheckSizeCheck = New System.Windows.Forms.CheckBox()
         Me.StatusGroup = New System.Windows.Forms.GroupBox()
+        Me.DiffModifiedTimeRadio = New System.Windows.Forms.RadioButton()
+        Me.DiffMd5Radio = New System.Windows.Forms.RadioButton()
+        Me.SyncModifiedTimeCheck = New System.Windows.Forms.CheckBox()
         Me.DiffConditionGroup.SuspendLayout()
         Me.SyncItemGroup.SuspendLayout()
         Me.CheckGroup.SuspendLayout()
@@ -149,9 +150,9 @@ Partial Class Main
         '
         Me.DiffConditionGroup.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.DiffConditionGroup.Controls.Add(Me.DiffMd5Check)
+        Me.DiffConditionGroup.Controls.Add(Me.DiffMd5Radio)
+        Me.DiffConditionGroup.Controls.Add(Me.DiffModifiedTimeRadio)
         Me.DiffConditionGroup.Controls.Add(Me.DiffSizeCheck)
-        Me.DiffConditionGroup.Controls.Add(Me.DiffModifiedTimeCheck)
         Me.DiffConditionGroup.Location = New System.Drawing.Point(14, 91)
         Me.DiffConditionGroup.Name = "DiffConditionGroup"
         Me.DiffConditionGroup.Size = New System.Drawing.Size(409, 45)
@@ -159,44 +160,24 @@ Partial Class Main
         Me.DiffConditionGroup.TabStop = False
         Me.DiffConditionGroup.Text = "比較条件"
         '
-        'DiffMd5Check
-        '
-        Me.DiffMd5Check.AutoSize = True
-        Me.DiffMd5Check.Location = New System.Drawing.Point(208, 18)
-        Me.DiffMd5Check.Name = "DiffMd5Check"
-        Me.DiffMd5Check.Size = New System.Drawing.Size(47, 16)
-        Me.DiffMd5Check.TabIndex = 18
-        Me.DiffMd5Check.Text = "MD5"
-        Me.DiffMd5Check.UseVisualStyleBackColor = True
-        '
         'DiffSizeCheck
         '
         Me.DiffSizeCheck.AutoSize = True
         Me.DiffSizeCheck.Checked = True
         Me.DiffSizeCheck.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.DiffSizeCheck.Location = New System.Drawing.Point(115, 18)
+        Me.DiffSizeCheck.Enabled = False
+        Me.DiffSizeCheck.Location = New System.Drawing.Point(22, 19)
         Me.DiffSizeCheck.Name = "DiffSizeCheck"
         Me.DiffSizeCheck.Size = New System.Drawing.Size(87, 16)
         Me.DiffSizeCheck.TabIndex = 17
         Me.DiffSizeCheck.Text = "ファイルサイズ"
         Me.DiffSizeCheck.UseVisualStyleBackColor = True
         '
-        'DiffModifiedTimeCheck
-        '
-        Me.DiffModifiedTimeCheck.AutoSize = True
-        Me.DiffModifiedTimeCheck.Checked = True
-        Me.DiffModifiedTimeCheck.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.DiffModifiedTimeCheck.Location = New System.Drawing.Point(37, 18)
-        Me.DiffModifiedTimeCheck.Name = "DiffModifiedTimeCheck"
-        Me.DiffModifiedTimeCheck.Size = New System.Drawing.Size(72, 16)
-        Me.DiffModifiedTimeCheck.TabIndex = 16
-        Me.DiffModifiedTimeCheck.Text = "更新日時"
-        Me.DiffModifiedTimeCheck.UseVisualStyleBackColor = True
-        '
         'SyncItemGroup
         '
         Me.SyncItemGroup.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.SyncItemGroup.Controls.Add(Me.SyncModifiedTimeCheck)
         Me.SyncItemGroup.Controls.Add(Me.SyncPurgeCheck)
         Me.SyncItemGroup.Controls.Add(Me.SyncCreatedTimeCheck)
         Me.SyncItemGroup.Location = New System.Drawing.Point(14, 142)
@@ -221,7 +202,7 @@ Partial Class Main
         Me.SyncCreatedTimeCheck.AutoSize = True
         Me.SyncCreatedTimeCheck.Checked = True
         Me.SyncCreatedTimeCheck.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.SyncCreatedTimeCheck.Location = New System.Drawing.Point(37, 18)
+        Me.SyncCreatedTimeCheck.Location = New System.Drawing.Point(130, 18)
         Me.SyncCreatedTimeCheck.Name = "SyncCreatedTimeCheck"
         Me.SyncCreatedTimeCheck.Size = New System.Drawing.Size(72, 16)
         Me.SyncCreatedTimeCheck.TabIndex = 15
@@ -275,7 +256,8 @@ Partial Class Main
         Me.CheckSizeCheck.AutoSize = True
         Me.CheckSizeCheck.Checked = True
         Me.CheckSizeCheck.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckSizeCheck.Location = New System.Drawing.Point(37, 18)
+        Me.CheckSizeCheck.Enabled = False
+        Me.CheckSizeCheck.Location = New System.Drawing.Point(22, 19)
         Me.CheckSizeCheck.Name = "CheckSizeCheck"
         Me.CheckSizeCheck.Size = New System.Drawing.Size(53, 16)
         Me.CheckSizeCheck.TabIndex = 15
@@ -293,6 +275,41 @@ Partial Class Main
         Me.StatusGroup.TabIndex = 23
         Me.StatusGroup.TabStop = False
         Me.StatusGroup.Text = "状況"
+        '
+        'DiffModifiedTimeRadio
+        '
+        Me.DiffModifiedTimeRadio.AutoSize = True
+        Me.DiffModifiedTimeRadio.Checked = True
+        Me.DiffModifiedTimeRadio.Location = New System.Drawing.Point(130, 17)
+        Me.DiffModifiedTimeRadio.Name = "DiffModifiedTimeRadio"
+        Me.DiffModifiedTimeRadio.Size = New System.Drawing.Size(71, 16)
+        Me.DiffModifiedTimeRadio.TabIndex = 19
+        Me.DiffModifiedTimeRadio.TabStop = True
+        Me.DiffModifiedTimeRadio.Text = "更新日時"
+        Me.DiffModifiedTimeRadio.UseVisualStyleBackColor = True
+        '
+        'DiffMd5Radio
+        '
+        Me.DiffMd5Radio.AutoSize = True
+        Me.DiffMd5Radio.Location = New System.Drawing.Point(207, 17)
+        Me.DiffMd5Radio.Name = "DiffMd5Radio"
+        Me.DiffMd5Radio.Size = New System.Drawing.Size(46, 16)
+        Me.DiffMd5Radio.TabIndex = 20
+        Me.DiffMd5Radio.Text = "MD5"
+        Me.DiffMd5Radio.UseVisualStyleBackColor = True
+        '
+        'SyncModifiedTimeCheck
+        '
+        Me.SyncModifiedTimeCheck.AutoSize = True
+        Me.SyncModifiedTimeCheck.Checked = True
+        Me.SyncModifiedTimeCheck.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.SyncModifiedTimeCheck.Enabled = False
+        Me.SyncModifiedTimeCheck.Location = New System.Drawing.Point(22, 19)
+        Me.SyncModifiedTimeCheck.Name = "SyncModifiedTimeCheck"
+        Me.SyncModifiedTimeCheck.Size = New System.Drawing.Size(72, 16)
+        Me.SyncModifiedTimeCheck.TabIndex = 18
+        Me.SyncModifiedTimeCheck.Text = "更新日時"
+        Me.SyncModifiedTimeCheck.UseVisualStyleBackColor = True
         '
         'Main
         '
@@ -340,9 +357,7 @@ Partial Class Main
     Friend WithEvents LogBox As System.Windows.Forms.TextBox
     Friend WithEvents LogLabel As System.Windows.Forms.Label
     Friend WithEvents DiffConditionGroup As System.Windows.Forms.GroupBox
-    Friend WithEvents DiffMd5Check As System.Windows.Forms.CheckBox
     Friend WithEvents DiffSizeCheck As System.Windows.Forms.CheckBox
-    Friend WithEvents DiffModifiedTimeCheck As System.Windows.Forms.CheckBox
     Friend WithEvents SyncItemGroup As System.Windows.Forms.GroupBox
     Friend WithEvents SyncPurgeCheck As System.Windows.Forms.CheckBox
     Friend WithEvents SyncCreatedTimeCheck As System.Windows.Forms.CheckBox
@@ -352,5 +367,8 @@ Partial Class Main
     Friend WithEvents CheckMd5Check As System.Windows.Forms.CheckBox
     Friend WithEvents CheckSizeCheck As System.Windows.Forms.CheckBox
     Friend WithEvents StatusGroup As System.Windows.Forms.GroupBox
+    Friend WithEvents DiffMd5Radio As System.Windows.Forms.RadioButton
+    Friend WithEvents DiffModifiedTimeRadio As System.Windows.Forms.RadioButton
+    Friend WithEvents SyncModifiedTimeCheck As System.Windows.Forms.CheckBox
 
 End Class

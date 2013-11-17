@@ -131,43 +131,70 @@ Public Class FolderSync
         Me.doSync = doSync
     End Sub
 
-    Public Sub Execute(ByVal fromFolderPath As String, ByVal toFolderPath As String)
+    Public Function Execute(ByVal fromFolderPath As String, ByVal toFolderPath As String) As String
         Try
             ' ログファイルを開く
             logWriter = New StreamWriter(logFilePath, True, LOG_FILE_ENCODING)
-            logWriter.WriteLine("同期開始")
+
+            If doSync Then
+                logWriter.WriteLine("同期開始")
+            Else
+                logWriter.WriteLine("差分取得開始")
+            End If
 
             ' 同期開始
             Sync(fromFolderPath, toFolderPath)
+
+            Dim sb As New StringBuilder()
+            If doSync Then
+                logWriter.WriteLine("同期終了")
+
+                sb.AppendFormat(MSG_FOLDER_NUM_CREATED, numFolderCreated)
+                sb.AppendLine()
+                sb.AppendFormat(MSG_FOLDER_NUM_FAILED_TO_CREATED, numFolderFailedToCreate)
+                sb.AppendLine()
+                sb.AppendFormat(MSG_FOLDER_NUM_FAILED_TO_COPY_ATTR, numFolderFailedToCopyAttr)
+                sb.AppendLine()
+                sb.AppendFormat(MSG_FOLDER_NUM_DELETED, numFolderDeleted)
+                sb.AppendLine()
+                sb.AppendFormat(MSG_FOLDER_NUM_FAILED_TO_DELETE, numFolderFailedToDelete)
+                sb.AppendLine()
+
+                sb.AppendFormat(MSG_FILE_NUM_SAME, numFileSame)
+                sb.AppendLine()
+                sb.AppendFormat(MSG_FILE_NUM_COPIED, numFileCopied)
+                sb.AppendLine()
+                sb.AppendFormat(MSG_FILE_NUM_FAILED_TO_COPY_ATTR, numFileFailedToCopyAttr)
+                sb.AppendLine()
+                sb.AppendFormat(MSG_FILE_FAILED_TO_COPY, numFileFailedToCopy)
+                sb.AppendLine()
+                sb.AppendFormat(MSG_FILE_NUM_COPIED_INVALID, numFileCopyInvalid)
+                sb.AppendLine()
+                sb.AppendFormat(MSG_FILE_NUM_DELETE, numFileDeleted)
+                sb.AppendLine()
+                sb.AppendFormat(MSG_FILE_NUM_FAILED_TO_DELETE, numFileFailedToDelete)
+                sb.AppendLine()
+            Else
+                logWriter.WriteLine("差分取得終了")
+            End If
+
+            Dim resultMsg As String = sb.ToString()
+            logWriter.Write(resultMsg)
+            Return resultMsg
         Catch ex As Exception
             MsgBox(ex.Message & vbCrLf & ex.StackTrace, MsgBoxStyle.OkOnly)
         Finally
             ' ログファイルを閉じる
             If Not IsNothing(logWriter) Then
                 Try
-                    logWriter.WriteLine("同期終了")
-
-                    logWriter.WriteLine(MSG_FOLDER_NUM_CREATED, numFolderCreated)
-                    logWriter.WriteLine(MSG_FOLDER_NUM_FAILED_TO_CREATED, numFolderFailedToCreate)
-                    logWriter.WriteLine(MSG_FOLDER_NUM_FAILED_TO_COPY_ATTR, numFolderFailedToCopyAttr)
-                    logWriter.WriteLine(MSG_FOLDER_NUM_DELETED, numFolderDeleted)
-                    logWriter.WriteLine(MSG_FOLDER_NUM_FAILED_TO_DELETE, numFolderFailedToDelete)
-
-                    logWriter.WriteLine(MSG_FILE_NUM_SAME, numFileSame)
-                    logWriter.WriteLine(MSG_FILE_NUM_COPIED, numFileCopied)
-                    logWriter.WriteLine(MSG_FILE_NUM_FAILED_TO_COPY_ATTR, numFileFailedToCopyAttr)
-                    logWriter.WriteLine(MSG_FILE_FAILED_TO_COPY, numFileFailedToCopy)
-                    logWriter.WriteLine(MSG_FILE_NUM_COPIED_INVALID, numFileCopyInvalid)
-                    logWriter.WriteLine(MSG_FILE_NUM_DELETE, numFileDeleted)
-                    logWriter.WriteLine(MSG_FILE_NUM_FAILED_TO_DELETE, numFileFailedToDelete)
-
                     logWriter.Close()
                 Catch ex As Exception
                     MsgBox(ex.Message & vbCrLf & ex.StackTrace, MsgBoxStyle.OkOnly)
                 End Try
             End If
         End Try
-    End Sub
+        Return Nothing
+    End Function
 
     ' 同期処理
     Private Sub Sync(ByVal fromFolder As String, ByVal toFolder As String)

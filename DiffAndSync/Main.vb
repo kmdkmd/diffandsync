@@ -65,15 +65,7 @@ Public Class Main
         If MsgBox(DIFF_CONFIRM_MSG, MsgBoxStyle.OkCancel, DIFF_CONFIRM_TITLE) <> MsgBoxResult.Ok Then
             Exit Sub
         End If
-        ' 実行前チェック
-        If Not CheckBefore() Then
-            Exit Sub
-        End If
-        ' 差分取得処理
-        Dim fc As New FolderSync(LogBox.Text, False)
-        fc.Execute(FromBox.Text, ToBox.Text)
-        ' 完了メッセージ
-        MsgBox(DIFF_FINISH_MSG, MsgBoxStyle.OkOnly, DIFF_FINISH_TITLE)
+        StartSync(False, DIFF_FINISH_TITLE, DIFF_FINISH_MSG)
     End Sub
 
     Private Sub SyncButton_Click(sender As Object, e As EventArgs) Handles SyncButton.Click
@@ -81,15 +73,7 @@ Public Class Main
         If MsgBox(SYNC_CONFIRM_MSG, MsgBoxStyle.OkCancel, SYNC_CONFIRM_TITLE) <> MsgBoxResult.Ok Then
             Exit Sub
         End If
-        ' 実行前チェック
-        If Not CheckBefore() Then
-            Exit Sub
-        End If
-        ' 同期処理
-        Dim fc As New FolderSync(LogBox.Text, True)
-        fc.Execute(FromBox.Text, ToBox.Text)
-        ' 完了メッセージ
-        MsgBox(SYNC_FINISH_MSG, MsgBoxStyle.OkOnly, SYNC_FINISH_TITLE)
+        StartSync(True, SYNC_FINISH_TITLE, SYNC_FINISH_MSG)
     End Sub
 
 #End Region
@@ -174,5 +158,18 @@ Public Class Main
     End Function
 
 #End Region
+
+    ' 同期実行
+    Private Sub StartSync(ByVal doSync As Boolean, ByVal title As String, ByVal msg As String)
+        ' 実行前チェック
+        If Not CheckBefore() Then
+            Exit Sub
+        End If
+        ' 同期処理
+        Dim fc As New FolderSync(LogBox.Text, doSync)
+        Dim resultMsg As String = fc.Execute(FromBox.Text, ToBox.Text)
+        ' 完了メッセージ
+        MsgBox(msg & vbCrLf & vbCrLf & resultMsg, MsgBoxStyle.OkOnly, title)
+    End Sub
 
 End Class
