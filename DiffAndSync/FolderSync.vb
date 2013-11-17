@@ -15,104 +15,157 @@ Public Class FolderSync
 
     Private ReadOnly doSync As Boolean
 
-#Region "ログメッセージ"
+#Region "ログメッセージ(差分)"
+
+#Region "個別ログ(共通)"
+
+    ' 一致
+    Private MSG_DIFF_COMMON_SAME As String = "{0} : 一致"
+    ' 不一致
+    Private MSG_DIFF_COMMON_SAME_NOT_FOUND As String = "{0} : 不一致(コピー元のみ)"
+
+#End Region
+
+#Region "個別ログ(フォルダ)"
+
+#End Region
+
+#Region "終了ログ(フォルダ)"
+
+    ' 一致数
+    Private Const MSG_DIFF_FOLDER_NUM_SAME As String = "一致フォルダ数 : {0}"
+    ' 不一致数
+    Private Const MSG_DIFF_FOLDER_NUM_SAME_NOT_FOUND As String = "不一致フォルダ数(コピー元のみ) : {0}"
+
+#End Region
+
+#End Region
+
+#Region "ログメッセージ(同期)"
 
 #Region "個別ログ(共通)"
 
     ' 属性コピー失敗
-    Private Const MSG_COMMON_FAILED_TO_COPY_ATTR As String = "{0} : 属性反映失敗"
+    Private Const MSG_SYNC_COMMON_FAILED_TO_COPY_ATTR As String = "{0} : 属性反映失敗"
 
     ' 削除失敗
-    Private Const MSG_COMMON_DELETED As String = "{0} : 削除"
+    Private Const MSG_SYNC_COMMON_DELETED As String = "{0} : 削除"
     ' 削除失敗
-    Private Const MSG_COMMON_FAILED_TO_DELETE As String = "{0} : 削除失敗"
+    Private Const MSG_SYNC_COMMON_FAILED_TO_DELETE As String = "{0} : 削除失敗"
 
 #End Region
 
 #Region "個別ログ(フォルダ)"
 
     ' 作成
-    Private Const MSG_FOLDER_CREATED As String = "{0} : 作成"
+    Private Const MSG_SYNC_FOLDER_CREATED As String = "{0} : 作成"
     ' 作成失敗
-    Private Const MSG_FOLDER_FAILED_TO_CREATE As String = "{0} : 作成失敗"
+    Private Const MSG_SYNC_FOLDER_FAILED_TO_CREATE As String = "{0} : 作成失敗"
 
 #End Region
 
 #Region "個別ログ(ファイル)"
 
     ' 同一
-    Private Const MSG_FILE_SAME As String = "{0} : 同一ファイル"
+    Private Const MSG_SYNC_FILE_SAME As String = "{0} : 同一ファイル"
 
     ' コピー
-    Private Const MSG_FILE_COPIED As String = "{0} : コピー"
+    Private Const MSG_SYNC_FILE_COPIED As String = "{0} : コピー"
     ' コピー失敗
-    Private Const MSG_FILE_FAILED_TO_COPY As String = "{0} : コピー失敗"
+    Private Const MSG_SYNC_FILE_FAILED_TO_COPY As String = "{0} : コピー失敗"
     ' コピー不整合
-    Private Const MSG_FILE_COPIED_INVALID As String = "{0} : コピー不整合"
+    Private Const MSG_SYNC_FILE_COPIED_INVALID As String = "{0} : コピー不整合"
 
 #End Region
 
 #Region "終了ログ(フォルダ)"
 
     ' 作成完了数
-    Private Const MSG_FOLDER_NUM_CREATED As String = "作成フォルダ数 : {0}"
+    Private Const MSG_SYNC_FOLDER_NUM_CREATED As String = "作成フォルダ数 : {0}"
     ' 作成失敗数
-    Private Const MSG_FOLDER_NUM_FAILED_TO_CREATED As String = "作成失敗フォルダ数 : {0}"
+    Private Const MSG_SYNC_FOLDER_NUM_FAILED_TO_CREATED As String = "作成失敗フォルダ数 : {0}"
 
     ' 属性コピー失敗フォルダ数
-    Private Const MSG_FOLDER_NUM_FAILED_TO_COPY_ATTR As String = "属性反映失敗フォルダ数 : {0}"
+    Private Const MSG_SYNC_FOLDER_NUM_FAILED_TO_COPY_ATTR As String = "属性反映失敗フォルダ数 : {0}"
 
     ' 削除完了フォルダ数
-    Private Const MSG_FOLDER_NUM_DELETED As String = "削除フォルダ数 : {0}"
+    Private Const MSG_SYNC_FOLDER_NUM_DELETED As String = "削除フォルダ数 : {0}"
     ' 削除失敗フォルダ数
-    Private Const MSG_FOLDER_NUM_FAILED_TO_DELETE As String = "削除失敗フォルダ数 : {0}"
+    Private Const MSG_SYNC_FOLDER_NUM_FAILED_TO_DELETE As String = "削除失敗フォルダ数 : {0}"
 
 #End Region
 
 #Region "終了ログ(ファイル)"
 
     ' 同一ファイル数
-    Private Const MSG_FILE_NUM_SAME As String = "同一ファイル数 : {0}"
+    Private Const MSG_SYNC_FILE_NUM_SAME As String = "同一ファイル数 : {0}"
 
     ' コピー完了数
-    Private Const MSG_FILE_NUM_COPIED As String = "コピーファイル数 : {0}"
+    Private Const MSG_SYNC_FILE_NUM_COPIED As String = "コピーファイル数 : {0}"
     ' コピー不整合数
-    Private Const MSG_FILE_NUM_COPIED_INVALID As String = "コピーファイル不整合数 : {0}"
+    Private Const MSG_SYNC_FILE_NUM_COPIED_INVALID As String = "コピーファイル不整合数 : {0}"
 
     ' 属性コピー失敗ファイル数
-    Private Const MSG_FILE_NUM_FAILED_TO_COPY_ATTR As String = "属性反映失敗ファイル数 : {0}"
+    Private Const MSG_SYNC_FILE_NUM_FAILED_TO_COPY_ATTR As String = "属性反映失敗ファイル数 : {0}"
 
     ' 削除完了ファイル数
-    Private Const MSG_FILE_NUM_DELETE As String = "削除ファイル数 : {0}"
+    Private Const MSG_SYNC_FILE_NUM_DELETE As String = "削除ファイル数 : {0}"
     ' 削除失敗ファイル数
-    Private Const MSG_FILE_NUM_FAILED_TO_DELETE As String = "削除失敗ファイル数 : {0}"
+    Private Const MSG_SYNC_FILE_NUM_FAILED_TO_DELETE As String = "削除失敗ファイル数 : {0}"
 
 #End Region
 
+#End Region
+
+#Region "カウンタ(差分)"
+
+    ' 同名フォルダ数
+    Private numDiffFolderSame As Integer = 0
+    ' 同名フォルダ無し数
+    Private numDiffFolderSameNotFound As Integer = 0
+
+#End Region
+
+#Region "カウンタ(同期)"
+
 #Region "カウンタ(フォルダ)"
 
-    Private numFolderCreated As Integer = 0
-    Private numFolderFailedToCreate As Integer = 0
+    ' 作成数
+    Private numSyncFolderCreated As Integer = 0
+    ' 作成失敗数
+    Private numSyncFolderFailedToCreate As Integer = 0
 
-    Private numFolderFailedToCopyAttr As Integer = 0
+    ' 属性コピー失敗数
+    Private numSyncFolderFailedToCopyAttr As Integer = 0
 
-    Private numFolderDeleted As Integer = 0
-    Private numFolderFailedToDelete As Integer = 0
+    ' 削除数
+    Private numSyncFolderDeleted As Integer = 0
+    ' 削除失敗数
+    Private numSyncFolderFailedToDelete As Integer = 0
 
 #End Region
 
 #Region "カウンタ(ファイル)"
 
-    Private numFileSame As Integer = 0
+    ' 同一数
+    Private numSyncFileSame As Integer = 0
 
-    Private numFileCopied As Integer = 0
-    Private numFileFailedToCopy As Integer = 0
-    Private numFileCopyInvalid As Integer = 0
+    ' コピー数
+    Private numSyncFileCopied As Integer = 0
+    ' コピー失敗数
+    Private numSyncFileFailedToCopy As Integer = 0
+    ' コピーファイル不整合数
+    Private numSyncFileCopyInvalid As Integer = 0
 
-    Private numFileFailedToCopyAttr As Integer = 0
+    ' 属性コピー失敗数
+    Private numSyncFileFailedToCopyAttr As Integer = 0
 
-    Private numFileDeleted As Integer = 0
-    Private numFileFailedToDelete As Integer = 0
+    ' 削除数
+    Private numSyncFileDeleted As Integer = 0
+    ' 削除失敗数
+    Private numSyncFileFailedToDelete As Integer = 0
+
+#End Region
 
 #End Region
 
@@ -121,8 +174,6 @@ Public Class FolderSync
     Private ReadOnly logFilePath As String
 
     Private logWriter As StreamWriter
-
-#End Region
 
 #End Region
 
@@ -148,34 +199,41 @@ Public Class FolderSync
             Dim sb As New StringBuilder()
             If doSync Then
                 logWriter.WriteLine("同期終了")
+                logWriter.WriteLine()
 
-                sb.AppendFormat(MSG_FOLDER_NUM_CREATED, numFolderCreated)
+                sb.AppendFormat(MSG_SYNC_FOLDER_NUM_CREATED, numSyncFolderCreated)
                 sb.AppendLine()
-                sb.AppendFormat(MSG_FOLDER_NUM_FAILED_TO_CREATED, numFolderFailedToCreate)
+                sb.AppendFormat(MSG_SYNC_FOLDER_NUM_FAILED_TO_CREATED, numSyncFolderFailedToCreate)
                 sb.AppendLine()
-                sb.AppendFormat(MSG_FOLDER_NUM_FAILED_TO_COPY_ATTR, numFolderFailedToCopyAttr)
+                sb.AppendFormat(MSG_SYNC_FOLDER_NUM_FAILED_TO_COPY_ATTR, numSyncFolderFailedToCopyAttr)
                 sb.AppendLine()
-                sb.AppendFormat(MSG_FOLDER_NUM_DELETED, numFolderDeleted)
+                sb.AppendFormat(MSG_SYNC_FOLDER_NUM_DELETED, numSyncFolderDeleted)
                 sb.AppendLine()
-                sb.AppendFormat(MSG_FOLDER_NUM_FAILED_TO_DELETE, numFolderFailedToDelete)
+                sb.AppendFormat(MSG_SYNC_FOLDER_NUM_FAILED_TO_DELETE, numSyncFolderFailedToDelete)
                 sb.AppendLine()
 
-                sb.AppendFormat(MSG_FILE_NUM_SAME, numFileSame)
+                sb.AppendFormat(MSG_SYNC_FILE_NUM_SAME, numSyncFileSame)
                 sb.AppendLine()
-                sb.AppendFormat(MSG_FILE_NUM_COPIED, numFileCopied)
+                sb.AppendFormat(MSG_SYNC_FILE_NUM_COPIED, numSyncFileCopied)
                 sb.AppendLine()
-                sb.AppendFormat(MSG_FILE_NUM_FAILED_TO_COPY_ATTR, numFileFailedToCopyAttr)
+                sb.AppendFormat(MSG_SYNC_FILE_NUM_FAILED_TO_COPY_ATTR, numSyncFileFailedToCopyAttr)
                 sb.AppendLine()
-                sb.AppendFormat(MSG_FILE_FAILED_TO_COPY, numFileFailedToCopy)
+                sb.AppendFormat(MSG_SYNC_FILE_FAILED_TO_COPY, numSyncFileFailedToCopy)
                 sb.AppendLine()
-                sb.AppendFormat(MSG_FILE_NUM_COPIED_INVALID, numFileCopyInvalid)
+                sb.AppendFormat(MSG_SYNC_FILE_NUM_COPIED_INVALID, numSyncFileCopyInvalid)
                 sb.AppendLine()
-                sb.AppendFormat(MSG_FILE_NUM_DELETE, numFileDeleted)
+                sb.AppendFormat(MSG_SYNC_FILE_NUM_DELETE, numSyncFileDeleted)
                 sb.AppendLine()
-                sb.AppendFormat(MSG_FILE_NUM_FAILED_TO_DELETE, numFileFailedToDelete)
+                sb.AppendFormat(MSG_SYNC_FILE_NUM_FAILED_TO_DELETE, numSyncFileFailedToDelete)
                 sb.AppendLine()
             Else
                 logWriter.WriteLine("差分取得終了")
+                logWriter.WriteLine()
+
+                sb.AppendFormat(MSG_DIFF_FOLDER_NUM_SAME, numDiffFolderSame)
+                sb.AppendLine()
+                sb.AppendFormat(MSG_DIFF_FOLDER_NUM_SAME_NOT_FOUND, numDiffFolderSameNotFound)
+                sb.AppendLine()
             End If
 
             Dim resultMsg As String = sb.ToString()
@@ -201,20 +259,26 @@ Public Class FolderSync
         ' Toフォルダがなければ作成
         CreateFolder(toFolder)
 
-        ' 不要ファイルの削除
-        DeleteFiles(fromFolder, toFolder)
+        ' TODO: 差分未実装
+        If doSync Then
+            ' 不要ファイルの削除
+            DeleteFiles(fromFolder, toFolder)
 
-        ' 不要フォルダの削除
-        DeleteFolders(fromFolder, toFolder)
+            ' 不要フォルダの削除
+            DeleteFolders(fromFolder, toFolder)
 
-        ' ファイルの同期
-        SyncFiles(fromFolder, toFolder)
+            ' ファイルの同期
+            SyncFiles(fromFolder, toFolder)
+        End If
 
         ' サブフォルダの同期
         SyncSubFolders(fromFolder, toFolder)
 
-        ' フォルダの属性コピー
-        CopyFolderAttributes(fromFolder, toFolder)
+        ' TODO: 差分未実装
+        If doSync Then
+            ' フォルダの属性コピー
+            CopyFolderAttributes(fromFolder, toFolder)
+        End If
     End Sub
 
 #Region "ファイル処理"
@@ -231,11 +295,11 @@ Public Class FolderSync
             ' ない場合はtoのファイルを削除
             Try
                 My.Computer.FileSystem.DeleteFile(toFile, FileIO.UIOption.OnlyErrorDialogs, FileIO.RecycleOption.SendToRecycleBin)
-                logWriter.WriteLine(MSG_COMMON_DELETED, toFile)
-                numFileDeleted += 1
+                logWriter.WriteLine(MSG_SYNC_COMMON_DELETED, toFile)
+                numSyncFileDeleted += 1
             Catch ex As Exception
-                logWriter.WriteLine(MSG_COMMON_FAILED_TO_DELETE, toFile)
-                numFileFailedToDelete += 1
+                logWriter.WriteLine(MSG_SYNC_COMMON_FAILED_TO_DELETE, toFile)
+                numSyncFileFailedToDelete += 1
             End Try
         Next
     End Sub
@@ -251,20 +315,20 @@ Public Class FolderSync
             Dim fromInfo As Nullable(Of SyncFileInfo) = GetFromFileInfoIfNotSame(fromFile, toFile)
             If IsNothing(fromInfo) Then
                 ' 同じファイル
-                logWriter.WriteLine(MSG_FILE_SAME, toFile)
-                numFileSame += 1
+                logWriter.WriteLine(MSG_SYNC_FILE_SAME, toFile)
+                numSyncFileSame += 1
             Else
                 ' ファイルをコピー
                 If CopyFile(fromFile, toFile) Then
                     ' コピーしたファイルを比較
                     If IsSameFile(fromFile, fromInfo, toFile) Then
                         ' 成功
-                        logWriter.WriteLine(MSG_FILE_COPIED, toFile)
-                        numFileCopied += 1
+                        logWriter.WriteLine(MSG_SYNC_FILE_COPIED, toFile)
+                        numSyncFileCopied += 1
                     Else
                         ' 不整合
-                        logWriter.WriteLine(MSG_FILE_COPIED_INVALID, toFile)
-                        numFileCopyInvalid += 1
+                        logWriter.WriteLine(MSG_SYNC_FILE_COPIED_INVALID, toFile)
+                        numSyncFileCopyInvalid += 1
                     End If
                 End If
             End If
@@ -278,8 +342,8 @@ Public Class FolderSync
             File.Copy(fromFile, toFile, True)
         Catch ex As Exception
             ' ファイルコピー失敗
-            logWriter.WriteLine(MSG_FILE_FAILED_TO_COPY, toFile)
-            numFileFailedToCopy += 1
+            logWriter.WriteLine(MSG_SYNC_FILE_FAILED_TO_COPY, toFile)
+            numSyncFileFailedToCopy += 1
             Return False
         End Try
 
@@ -289,8 +353,8 @@ Public Class FolderSync
             ' 作成日時
             File.SetCreationTime(toFile, File.GetCreationTime(fromFile))
         Catch ex As Exception
-            logWriter.WriteLine(MSG_COMMON_FAILED_TO_COPY_ATTR, toFile)
-            numFileFailedToCopyAttr += 1
+            logWriter.WriteLine(MSG_SYNC_COMMON_FAILED_TO_COPY_ATTR, toFile)
+            numSyncFileFailedToCopyAttr += 1
             Return False
         End Try
 
@@ -363,11 +427,11 @@ Public Class FolderSync
             ' ない場合はtoのファイルを削除
             Try
                 My.Computer.FileSystem.DeleteDirectory(toSubFolder, FileIO.UIOption.OnlyErrorDialogs, FileIO.RecycleOption.SendToRecycleBin)
-                logWriter.WriteLine(MSG_COMMON_DELETED, toSubFolder)
-                numFolderDeleted += 1
+                logWriter.WriteLine(MSG_SYNC_COMMON_DELETED, toSubFolder)
+                numSyncFolderDeleted += 1
             Catch ex As Exception
-                logWriter.WriteLine(MSG_COMMON_FAILED_TO_DELETE, toSubFolder)
-                numFolderFailedToDelete += 1
+                logWriter.WriteLine(MSG_SYNC_COMMON_FAILED_TO_DELETE, toSubFolder)
+                numSyncFolderFailedToDelete += 1
             End Try
         Next
     End Sub
@@ -375,15 +439,27 @@ Public Class FolderSync
     ' Toフォルダの作成
     Private Sub CreateFolder(ByVal toFolder As String)
         If Directory.Exists(toFolder) Then
+            ' 差分用同一フォルダ有り
+            If Not doSync Then
+                logWriter.WriteLine(MSG_DIFF_COMMON_SAME, toFolder)
+                numDiffFolderSame += 1
+            End If
             Exit Sub
         End If
+        ' 差分用同一フォルダ無し
+        If Not doSync Then
+            logWriter.WriteLine(MSG_DIFF_COMMON_SAME_NOT_FOUND, toFolder)
+            numDiffFolderSameNotFound += 1
+            Exit Sub
+        End If
+        ' 同期フォルダ作成
         Try
             Directory.CreateDirectory(toFolder)
-            logWriter.WriteLine(MSG_FOLDER_CREATED, toFolder)
-            numFolderCreated += 1
+            logWriter.WriteLine(MSG_SYNC_FOLDER_CREATED, toFolder)
+            numSyncFolderCreated += 1
         Catch ex As Exception
-            logWriter.WriteLine(MSG_FOLDER_FAILED_TO_CREATE, toFolder)
-            numFolderFailedToCreate += 1
+            logWriter.WriteLine(MSG_SYNC_FOLDER_FAILED_TO_CREATE, toFolder)
+            numSyncFolderFailedToCreate += 1
             Exit Sub
         End Try
     End Sub
@@ -398,8 +474,8 @@ Public Class FolderSync
             ' 更新日時
             Directory.SetLastWriteTime(toFolder, Directory.GetCreationTime(fromFolder))
         Catch ex As Exception
-            logWriter.WriteLine(MSG_COMMON_FAILED_TO_COPY_ATTR, toFolder)
-            numFolderFailedToCopyAttr += 1
+            logWriter.WriteLine(MSG_SYNC_COMMON_FAILED_TO_COPY_ATTR, toFolder)
+            numSyncFolderFailedToCopyAttr += 1
         End Try
     End Sub
 
