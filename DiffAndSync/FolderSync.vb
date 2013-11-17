@@ -174,6 +174,9 @@ Public Class FolderSync
         ' Toフォルダがなければ作成
         CreateFolder(toFolder)
 
+        ' 不要ファイルの削除
+        DeleteFiles(fromFolder, toFolder)
+
         ' ファイルの同期
         SyncFiles(fromFolder, toFolder)
 
@@ -186,11 +189,29 @@ Public Class FolderSync
 
 #Region "ファイル処理"
 
+    ' Toからファイルを削除
+    Private Sub DeleteFiles(ByVal fromFolder As String, ByVal toFolder As String)
+        ' Toフォルダのファイルでループ
+        Dim toFiles As String() = Directory.GetFiles(toFolder)
+        For Each toFile As String In toFiles
+            ' fromに同名のファイルがあるか
+            If File.Exists(Path.Combine(fromFolder, Path.GetFileName(toFile))) Then
+                Continue For
+            End If
+            ' ない場合はtoのファイルを削除
+            Try
+                My.Computer.FileSystem.DeleteFile(toFile, FileIO.UIOption.OnlyErrorDialogs, FileIO.RecycleOption.SendToRecycleBin)
+                logWriter.WriteLine(MSG_COMMON_DELETED, toFile)
+                numFileDeleted += 1
+            Catch ex As Exception
+                logWriter.WriteLine(MSG_COMMON_FAILED_TO_DELETE, toFile)
+                numFileFailedToDelete += 1
+            End Try
+        Next
+    End Sub
+
     ' ファイルの同期
     Private Sub SyncFiles(ByVal fromFolder As String, ByVal toFolder As String)
-        ' Toフォルダのファイル一覧取得
-        Dim toFiles As List(Of String) = New List(Of String)(Directory.GetFiles(toFolder))
-
         ' From-Toのループ
         For Each fromFile As String In Directory.GetFiles(fromFolder)
             ' toのファイルパス取得
@@ -217,24 +238,6 @@ Public Class FolderSync
                     End If
                 End If
             End If
-
-            ' 同期完了したのでToのフォルダリストから削除
-            Dim deleteIndex As Integer = toFiles.IndexOf(toFile)
-            If deleteIndex >= 0 Then
-                toFiles.RemoveAt(deleteIndex)
-            End If
-        Next
-
-        ' Toディレクトリファイル一覧から削除
-        For Each toFile As String In toFiles
-            Try
-                My.Computer.FileSystem.DeleteFile(toFile, FileIO.UIOption.OnlyErrorDialogs, FileIO.RecycleOption.SendToRecycleBin)
-                logWriter.WriteLine(MSG_COMMON_DELETED, toFile)
-                numFileDeleted += 1
-            Catch ex As Exception
-                logWriter.WriteLine(MSG_COMMON_FAILED_TO_DELETE, toFile)
-                numFileFailedToDelete += 1
-            End Try
         Next
     End Sub
 
