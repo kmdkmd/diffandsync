@@ -36,7 +36,6 @@ Partial Class Main
         Me.DiffMd5Check = New System.Windows.Forms.CheckBox()
         Me.DiffSizeCheck = New System.Windows.Forms.CheckBox()
         Me.DiffModifiedTimeCheck = New System.Windows.Forms.CheckBox()
-        Me.DiffCreatetimeCheck = New System.Windows.Forms.CheckBox()
         Me.SyncItemGroup = New System.Windows.Forms.GroupBox()
         Me.SyncPurgeCheck = New System.Windows.Forms.CheckBox()
         Me.SyncCreatedTimeCheck = New System.Windows.Forms.CheckBox()
@@ -67,13 +66,13 @@ Partial Class Main
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.FromBox.Location = New System.Drawing.Point(51, 6)
         Me.FromBox.Name = "FromBox"
-        Me.FromBox.Size = New System.Drawing.Size(280, 19)
+        Me.FromBox.Size = New System.Drawing.Size(290, 19)
         Me.FromBox.TabIndex = 1
         '
         'FromButton
         '
         Me.FromButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.FromButton.Location = New System.Drawing.Point(337, 4)
+        Me.FromButton.Location = New System.Drawing.Point(347, 4)
         Me.FromButton.Name = "FromButton"
         Me.FromButton.Size = New System.Drawing.Size(75, 23)
         Me.FromButton.TabIndex = 2
@@ -83,7 +82,7 @@ Partial Class Main
         'ToButton
         '
         Me.ToButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ToButton.Location = New System.Drawing.Point(337, 33)
+        Me.ToButton.Location = New System.Drawing.Point(347, 33)
         Me.ToButton.Name = "ToButton"
         Me.ToButton.Size = New System.Drawing.Size(75, 23)
         Me.ToButton.TabIndex = 5
@@ -96,7 +95,7 @@ Partial Class Main
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ToBox.Location = New System.Drawing.Point(51, 35)
         Me.ToBox.Name = "ToBox"
-        Me.ToBox.Size = New System.Drawing.Size(280, 19)
+        Me.ToBox.Size = New System.Drawing.Size(290, 19)
         Me.ToBox.TabIndex = 4
         '
         'ToLabel
@@ -111,7 +110,7 @@ Partial Class Main
         'DiffButton
         '
         Me.DiffButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.DiffButton.Location = New System.Drawing.Point(166, 297)
+        Me.DiffButton.Location = New System.Drawing.Point(176, 297)
         Me.DiffButton.Name = "DiffButton"
         Me.DiffButton.Size = New System.Drawing.Size(120, 23)
         Me.DiffButton.TabIndex = 6
@@ -121,7 +120,7 @@ Partial Class Main
         'SyncButton
         '
         Me.SyncButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.SyncButton.Location = New System.Drawing.Point(292, 297)
+        Me.SyncButton.Location = New System.Drawing.Point(302, 297)
         Me.SyncButton.Name = "SyncButton"
         Me.SyncButton.Size = New System.Drawing.Size(120, 23)
         Me.SyncButton.TabIndex = 7
@@ -134,7 +133,7 @@ Partial Class Main
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.LogBox.Location = New System.Drawing.Point(51, 64)
         Me.LogBox.Name = "LogBox"
-        Me.LogBox.Size = New System.Drawing.Size(280, 19)
+        Me.LogBox.Size = New System.Drawing.Size(290, 19)
         Me.LogBox.TabIndex = 9
         '
         'LogLabel
@@ -153,10 +152,9 @@ Partial Class Main
         Me.DiffConditionGroup.Controls.Add(Me.DiffMd5Check)
         Me.DiffConditionGroup.Controls.Add(Me.DiffSizeCheck)
         Me.DiffConditionGroup.Controls.Add(Me.DiffModifiedTimeCheck)
-        Me.DiffConditionGroup.Controls.Add(Me.DiffCreatetimeCheck)
         Me.DiffConditionGroup.Location = New System.Drawing.Point(14, 91)
         Me.DiffConditionGroup.Name = "DiffConditionGroup"
-        Me.DiffConditionGroup.Size = New System.Drawing.Size(399, 45)
+        Me.DiffConditionGroup.Size = New System.Drawing.Size(409, 45)
         Me.DiffConditionGroup.TabIndex = 18
         Me.DiffConditionGroup.TabStop = False
         Me.DiffConditionGroup.Text = "比較条件"
@@ -164,7 +162,7 @@ Partial Class Main
         'DiffMd5Check
         '
         Me.DiffMd5Check.AutoSize = True
-        Me.DiffMd5Check.Location = New System.Drawing.Point(286, 18)
+        Me.DiffMd5Check.Location = New System.Drawing.Point(208, 18)
         Me.DiffMd5Check.Name = "DiffMd5Check"
         Me.DiffMd5Check.Size = New System.Drawing.Size(47, 16)
         Me.DiffMd5Check.TabIndex = 18
@@ -176,7 +174,7 @@ Partial Class Main
         Me.DiffSizeCheck.AutoSize = True
         Me.DiffSizeCheck.Checked = True
         Me.DiffSizeCheck.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.DiffSizeCheck.Location = New System.Drawing.Point(193, 18)
+        Me.DiffSizeCheck.Location = New System.Drawing.Point(115, 18)
         Me.DiffSizeCheck.Name = "DiffSizeCheck"
         Me.DiffSizeCheck.Size = New System.Drawing.Size(87, 16)
         Me.DiffSizeCheck.TabIndex = 17
@@ -188,24 +186,12 @@ Partial Class Main
         Me.DiffModifiedTimeCheck.AutoSize = True
         Me.DiffModifiedTimeCheck.Checked = True
         Me.DiffModifiedTimeCheck.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.DiffModifiedTimeCheck.Location = New System.Drawing.Point(115, 18)
+        Me.DiffModifiedTimeCheck.Location = New System.Drawing.Point(37, 18)
         Me.DiffModifiedTimeCheck.Name = "DiffModifiedTimeCheck"
         Me.DiffModifiedTimeCheck.Size = New System.Drawing.Size(72, 16)
         Me.DiffModifiedTimeCheck.TabIndex = 16
         Me.DiffModifiedTimeCheck.Text = "更新日時"
         Me.DiffModifiedTimeCheck.UseVisualStyleBackColor = True
-        '
-        'DiffCreatetimeCheck
-        '
-        Me.DiffCreatetimeCheck.AutoSize = True
-        Me.DiffCreatetimeCheck.Checked = True
-        Me.DiffCreatetimeCheck.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.DiffCreatetimeCheck.Location = New System.Drawing.Point(37, 18)
-        Me.DiffCreatetimeCheck.Name = "DiffCreatetimeCheck"
-        Me.DiffCreatetimeCheck.Size = New System.Drawing.Size(72, 16)
-        Me.DiffCreatetimeCheck.TabIndex = 15
-        Me.DiffCreatetimeCheck.Text = "作成日時"
-        Me.DiffCreatetimeCheck.UseVisualStyleBackColor = True
         '
         'SyncItemGroup
         '
@@ -215,7 +201,7 @@ Partial Class Main
         Me.SyncItemGroup.Controls.Add(Me.SyncCreatedTimeCheck)
         Me.SyncItemGroup.Location = New System.Drawing.Point(14, 142)
         Me.SyncItemGroup.Name = "SyncItemGroup"
-        Me.SyncItemGroup.Size = New System.Drawing.Size(399, 45)
+        Me.SyncItemGroup.Size = New System.Drawing.Size(409, 45)
         Me.SyncItemGroup.TabIndex = 19
         Me.SyncItemGroup.TabStop = False
         Me.SyncItemGroup.Text = "同期"
@@ -223,7 +209,7 @@ Partial Class Main
         'SyncPurgeCheck
         '
         Me.SyncPurgeCheck.AutoSize = True
-        Me.SyncPurgeCheck.Location = New System.Drawing.Point(193, 18)
+        Me.SyncPurgeCheck.Location = New System.Drawing.Point(208, 18)
         Me.SyncPurgeCheck.Name = "SyncPurgeCheck"
         Me.SyncPurgeCheck.Size = New System.Drawing.Size(187, 16)
         Me.SyncPurgeCheck.TabIndex = 17
@@ -254,7 +240,7 @@ Partial Class Main
         'LogFolderButton
         '
         Me.LogFolderButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.LogFolderButton.Location = New System.Drawing.Point(337, 62)
+        Me.LogFolderButton.Location = New System.Drawing.Point(347, 62)
         Me.LogFolderButton.Name = "LogFolderButton"
         Me.LogFolderButton.Size = New System.Drawing.Size(75, 23)
         Me.LogFolderButton.TabIndex = 21
@@ -269,7 +255,7 @@ Partial Class Main
         Me.CheckGroup.Controls.Add(Me.CheckSizeCheck)
         Me.CheckGroup.Location = New System.Drawing.Point(13, 193)
         Me.CheckGroup.Name = "CheckGroup"
-        Me.CheckGroup.Size = New System.Drawing.Size(399, 45)
+        Me.CheckGroup.Size = New System.Drawing.Size(409, 45)
         Me.CheckGroup.TabIndex = 22
         Me.CheckGroup.TabStop = False
         Me.CheckGroup.Text = "同期後チェック"
@@ -303,7 +289,7 @@ Partial Class Main
         Me.StatusGroup.Controls.Add(Me.StatusLabel)
         Me.StatusGroup.Location = New System.Drawing.Point(14, 244)
         Me.StatusGroup.Name = "StatusGroup"
-        Me.StatusGroup.Size = New System.Drawing.Size(399, 35)
+        Me.StatusGroup.Size = New System.Drawing.Size(409, 35)
         Me.StatusGroup.TabIndex = 23
         Me.StatusGroup.TabStop = False
         Me.StatusGroup.Text = "状況"
@@ -312,7 +298,7 @@ Partial Class Main
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(424, 332)
+        Me.ClientSize = New System.Drawing.Size(434, 332)
         Me.Controls.Add(Me.StatusGroup)
         Me.Controls.Add(Me.CheckGroup)
         Me.Controls.Add(Me.LogFolderButton)
@@ -328,7 +314,7 @@ Partial Class Main
         Me.Controls.Add(Me.FromButton)
         Me.Controls.Add(Me.FromBox)
         Me.Controls.Add(Me.FromLabel)
-        Me.MinimumSize = New System.Drawing.Size(440, 370)
+        Me.MinimumSize = New System.Drawing.Size(450, 370)
         Me.Name = "Main"
         Me.Text = "DiffAndSync"
         Me.DiffConditionGroup.ResumeLayout(False)
@@ -357,7 +343,6 @@ Partial Class Main
     Friend WithEvents DiffMd5Check As System.Windows.Forms.CheckBox
     Friend WithEvents DiffSizeCheck As System.Windows.Forms.CheckBox
     Friend WithEvents DiffModifiedTimeCheck As System.Windows.Forms.CheckBox
-    Friend WithEvents DiffCreatetimeCheck As System.Windows.Forms.CheckBox
     Friend WithEvents SyncItemGroup As System.Windows.Forms.GroupBox
     Friend WithEvents SyncPurgeCheck As System.Windows.Forms.CheckBox
     Friend WithEvents SyncCreatedTimeCheck As System.Windows.Forms.CheckBox

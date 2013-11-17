@@ -76,6 +76,13 @@ Public Class FolderSync
 
     Private ReadOnly doSync As Boolean
 
+    ' ファイル比較用ファイル情報
+    Private Structure SyncFileInfo
+        Dim LastWriteDate As Date
+        Dim FileSize As Integer
+        Dim MD5 As String
+    End Structure
+
     Public Sub New(ByVal logFilePath As String, ByVal doSync As Boolean)
         Me.logFilePath = logFilePath
         Me.doSync = doSync
@@ -137,36 +144,21 @@ Public Class FolderSync
 
         ' From-Toのループ
         For Each fromFile As String In Directory.GetFiles(fromFolder)
-            ' Fromのファイル名取得
-            ' Fromのフォルダ名取得
+            ' toのファイルパス取得
             Dim toFile As String = Path.Combine(toFolder, Path.GetFileName(fromFile))
 
-            ' Fromのファイル名と同じ名前のToのファイルがあるかチェック
-
-            ' Fromのファイルの作成日時取得
-            ' Toのファイルの作成日時取得
-            ' 作成日時比較
-
-            ' Fromのファイルの更新日時取得
-            ' Toのファイルの更新日時取得
-            ' 更新日時比較
-
-            ' Fromのファイルサイズ取得
-            ' Toのファイルサイズ取得
-            ' ファイルサイズ比較
-
-            ' FromのファイルのMD5チェックサムを取得
-            ' ToのファイルのMD5チェックサムを取得
-            ' チェックサム比較
-
-            ' ファイルをコピー
-            ' 作成日時をセット
-            ' アクセス日時をセット
-
-            ' ファイルサイズを比較
-            ' FromのファイルのMD5チェックサムを未取得の場合は取得
-            ' ToのファイルのMD5チェックサムを未取得の場合は取得
-            ' チェックサム比較
+            ' ファイルの比較
+            Dim fromInfo As Nullable(Of SyncFileInfo) = GetFromFileInfoIfNotSame(fromFile, toFile)
+            If Not IsNothing(fromInfo) Then
+                ' ファイルをコピー
+                ' 作成日時をセット
+                ' アクセス日時をセット
+                
+                ' ファイルサイズを比較
+                ' FromのファイルのMD5チェックサムを未取得の場合は取得
+                ' ToのファイルのMD5チェックサムを未取得の場合は取得
+                ' チェックサム比較
+            End If
 
             ' 同期完了したのでToのフォルダリストから削除
             Dim deleteIndex As Integer = toFiles.IndexOf(toFile)
@@ -187,6 +179,36 @@ Public Class FolderSync
             End Try
         Next
     End Sub
+
+    ' ファイルが同じかどうか比較して同じじゃない場合はfromのファイルの比較情報を取得
+    ' MD5 > ファイルサイズ > 更新日時 > 作成日時 > ファイルパス
+    Private Function GetFromFileInfoIfNotSame(ByVal fromFile As String, ByVal toFile As String) As Nullable(Of SyncFileInfo)
+        Dim fromInfo As SyncFileInfo = New SyncFileInfo
+
+        ' Fromのファイル名と同じ名前のToのファイルがあるかチェック
+        If Not File.Exists(toFile) Then
+            Return fromInfo
+        End If
+
+        ' 更新日時比較
+        fromInfo.LastWriteDate = File.GetLastWriteTime(fromFile)
+        If fromInfo.LastWriteDate.Ticks <> File.GetLastWriteTime(toFile).Ticks Then
+            Return fromInfo
+        End If
+
+        ' ファイルサイズ比較
+        fromInfo.FileSize = New FileInfo(fromFile).Length
+        If fromInfo.FileSize <> New FileInfo(toFile).Length Then
+            Return fromInfo
+        End If
+
+        ' TODO: MD5
+        ' FromのファイルのMD5チェックサムを取得
+        ' ToのファイルのMD5チェックサムを取得
+        ' チェックサム比較
+
+        Return Nothing
+    End Function
 
     ' Toフォルダの作成
     Private Sub CreateFolder(ByVal toFolder As String)
