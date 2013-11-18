@@ -21,12 +21,10 @@ Public Class FolderSync
 
     ' 一致
     Private MSG_DIFF_COMMON_SAME As String = "{0} : 一致"
-    ' 不一致
-    Private MSG_DIFF_COMMON_SAME_NOT_FOUND As String = "{0} : 不一致(コピー元のみ)"
-
-#End Region
-
-#Region "個別ログ(フォルダ)"
+    ' 不一致(コピー元のみ)
+    Private MSG_DIFF_COMMON_ONLY_FROM As String = "{0} : 不一致(コピー元のみ)"
+    ' 不一致(コピー先のみ)
+    Private MSG_DIFF_COMMON_ONLY_TO As String = "{0} : 不一致(コピー先のみ)"
 
 #End Region
 
@@ -34,8 +32,15 @@ Public Class FolderSync
 
     ' 一致数
     Private Const MSG_DIFF_FOLDER_NUM_SAME As String = "一致フォルダ数 : {0}"
-    ' 不一致数
-    Private Const MSG_DIFF_FOLDER_NUM_SAME_NOT_FOUND As String = "不一致フォルダ数(コピー元のみ) : {0}"
+    ' 不一致数(コピー元のみ)
+    Private Const MSG_DIFF_FOLDER_NUM_ONLY_FROM As String = "不一致フォルダ数(コピー元のみ) : {0}"
+
+#End Region
+
+#Region "終了ログ(ファイル)"
+
+    ' 不一致数(コピー先のみ)
+    Private Const MSG_DIFF_FILE_NUM_ONLY_TO As String = "不一致ファイル数(コピー先のみ) : {0}"
 
 #End Region
 
@@ -121,8 +126,11 @@ Public Class FolderSync
 
     ' 同名フォルダ数
     Private numDiffFolderSame As Integer = 0
-    ' 同名フォルダ無し数
-    Private numDiffFolderSameNotFound As Integer = 0
+    ' 同名フォルダ不一致数(コピー元のみ)
+    Private numDiffFolderOnlyFrom As Integer = 0
+
+    ' 同名ファイル不一致数(コピー先のみ)
+    Private numDiffFileOnlyTo As Integer = 0
 
 #End Region
 
@@ -177,6 +185,8 @@ Public Class FolderSync
 
 #End Region
 
+#Region "パブリックメソッド"
+
     Public Sub New(ByVal logFilePath As String, ByVal doSync As Boolean)
         Me.logFilePath = logFilePath
         Me.doSync = doSync
@@ -196,48 +206,10 @@ Public Class FolderSync
             ' 同期開始
             Sync(fromFolderPath, toFolderPath)
 
-            Dim sb As New StringBuilder()
-            If doSync Then
-                logWriter.WriteLine("同期終了")
-                logWriter.WriteLine()
-
-                sb.AppendFormat(MSG_SYNC_FOLDER_NUM_CREATED, numSyncFolderCreated)
-                sb.AppendLine()
-                sb.AppendFormat(MSG_SYNC_FOLDER_NUM_FAILED_TO_CREATED, numSyncFolderFailedToCreate)
-                sb.AppendLine()
-                sb.AppendFormat(MSG_SYNC_FOLDER_NUM_FAILED_TO_COPY_ATTR, numSyncFolderFailedToCopyAttr)
-                sb.AppendLine()
-                sb.AppendFormat(MSG_SYNC_FOLDER_NUM_DELETED, numSyncFolderDeleted)
-                sb.AppendLine()
-                sb.AppendFormat(MSG_SYNC_FOLDER_NUM_FAILED_TO_DELETE, numSyncFolderFailedToDelete)
-                sb.AppendLine()
-
-                sb.AppendFormat(MSG_SYNC_FILE_NUM_SAME, numSyncFileSame)
-                sb.AppendLine()
-                sb.AppendFormat(MSG_SYNC_FILE_NUM_COPIED, numSyncFileCopied)
-                sb.AppendLine()
-                sb.AppendFormat(MSG_SYNC_FILE_NUM_FAILED_TO_COPY_ATTR, numSyncFileFailedToCopyAttr)
-                sb.AppendLine()
-                sb.AppendFormat(MSG_SYNC_FILE_FAILED_TO_COPY, numSyncFileFailedToCopy)
-                sb.AppendLine()
-                sb.AppendFormat(MSG_SYNC_FILE_NUM_COPIED_INVALID, numSyncFileCopyInvalid)
-                sb.AppendLine()
-                sb.AppendFormat(MSG_SYNC_FILE_NUM_DELETE, numSyncFileDeleted)
-                sb.AppendLine()
-                sb.AppendFormat(MSG_SYNC_FILE_NUM_FAILED_TO_DELETE, numSyncFileFailedToDelete)
-                sb.AppendLine()
-            Else
-                logWriter.WriteLine("差分取得終了")
-                logWriter.WriteLine()
-
-                sb.AppendFormat(MSG_DIFF_FOLDER_NUM_SAME, numDiffFolderSame)
-                sb.AppendLine()
-                sb.AppendFormat(MSG_DIFF_FOLDER_NUM_SAME_NOT_FOUND, numDiffFolderSameNotFound)
-                sb.AppendLine()
-            End If
-
-            Dim resultMsg As String = sb.ToString()
+            ' 同期終了ログ
+            Dim resultMsg As String = IIf(doSync, LogSyncEnd(), LogDiffEnd())
             logWriter.Write(resultMsg)
+
             Return resultMsg
         Catch ex As Exception
             MsgBox(ex.Message & vbCrLf & ex.StackTrace, MsgBoxStyle.OkOnly)
@@ -254,16 +226,70 @@ Public Class FolderSync
         Return Nothing
     End Function
 
+#End Region
+
+    ' 同期終了時のログ
+    Private Function LogSyncEnd() As String
+        logWriter.WriteLine("同期終了")
+        logWriter.WriteLine()
+
+        Dim sb As New StringBuilder()
+        sb.AppendFormat(MSG_SYNC_FOLDER_NUM_CREATED, numSyncFolderCreated)
+        sb.AppendLine()
+        sb.AppendFormat(MSG_SYNC_FOLDER_NUM_FAILED_TO_CREATED, numSyncFolderFailedToCreate)
+        sb.AppendLine()
+        sb.AppendFormat(MSG_SYNC_FOLDER_NUM_FAILED_TO_COPY_ATTR, numSyncFolderFailedToCopyAttr)
+        sb.AppendLine()
+        sb.AppendFormat(MSG_SYNC_FOLDER_NUM_DELETED, numSyncFolderDeleted)
+        sb.AppendLine()
+        sb.AppendFormat(MSG_SYNC_FOLDER_NUM_FAILED_TO_DELETE, numSyncFolderFailedToDelete)
+        sb.AppendLine()
+
+        sb.AppendFormat(MSG_SYNC_FILE_NUM_SAME, numSyncFileSame)
+        sb.AppendLine()
+        sb.AppendFormat(MSG_SYNC_FILE_NUM_COPIED, numSyncFileCopied)
+        sb.AppendLine()
+        sb.AppendFormat(MSG_SYNC_FILE_NUM_FAILED_TO_COPY_ATTR, numSyncFileFailedToCopyAttr)
+        sb.AppendLine()
+        sb.AppendFormat(MSG_SYNC_FILE_FAILED_TO_COPY, numSyncFileFailedToCopy)
+        sb.AppendLine()
+        sb.AppendFormat(MSG_SYNC_FILE_NUM_COPIED_INVALID, numSyncFileCopyInvalid)
+        sb.AppendLine()
+        sb.AppendFormat(MSG_SYNC_FILE_NUM_DELETE, numSyncFileDeleted)
+        sb.AppendLine()
+        sb.AppendFormat(MSG_SYNC_FILE_NUM_FAILED_TO_DELETE, numSyncFileFailedToDelete)
+        sb.AppendLine()
+
+        Return sb.ToString()
+    End Function
+
+    ' 差分取得終了時のログ
+    Private Function LogDiffEnd() As String
+        logWriter.WriteLine("差分取得終了")
+        logWriter.WriteLine()
+
+        Dim sb As New StringBuilder()
+        sb.AppendFormat(MSG_DIFF_FOLDER_NUM_SAME, numDiffFolderSame)
+        sb.AppendLine()
+        sb.AppendFormat(MSG_DIFF_FOLDER_NUM_ONLY_FROM, numDiffFolderOnlyFrom)
+        sb.AppendLine()
+
+        sb.AppendFormat(MSG_DIFF_FILE_NUM_ONLY_TO, numDiffFileOnlyTo)
+        sb.AppendLine()
+
+        Return sb.ToString()
+    End Function
+
     ' 同期処理
     Private Sub Sync(ByVal fromFolder As String, ByVal toFolder As String)
         ' Toフォルダがなければ作成
         CreateFolder(toFolder)
 
+        ' 不要ファイルの削除
+        DeleteFiles(fromFolder, toFolder)
+
         ' TODO: 差分未実装
         If doSync Then
-            ' 不要ファイルの削除
-            DeleteFiles(fromFolder, toFolder)
-
             ' 不要フォルダの削除
             DeleteFolders(fromFolder, toFolder)
 
@@ -274,17 +300,18 @@ Public Class FolderSync
         ' サブフォルダの同期
         SyncSubFolders(fromFolder, toFolder)
 
-        ' TODO: 差分未実装
-        If doSync Then
-            ' フォルダの属性コピー
-            CopyFolderAttributes(fromFolder, toFolder)
-        End If
+        ' フォルダの属性反映
+        CopyFolderAttributes(fromFolder, toFolder)
     End Sub
 
 #Region "ファイル処理"
 
     ' Toからファイルを削除
     Private Sub DeleteFiles(ByVal fromFolder As String, ByVal toFolder As String)
+        ' コピー先フォルダがない場合はなにもしない
+        If Not Directory.Exists(toFolder) Then
+            Exit Sub
+        End If
         ' Toフォルダのファイルでループ
         Dim toFiles As String() = Directory.GetFiles(toFolder)
         For Each toFile As String In toFiles
@@ -292,7 +319,14 @@ Public Class FolderSync
             If File.Exists(Path.Combine(fromFolder, Path.GetFileName(toFile))) Then
                 Continue For
             End If
-            ' ない場合はtoのファイルを削除
+            ' ない場合
+            ' 差分の場合はカウント
+            If Not doSync Then
+                logWriter.WriteLine(MSG_DIFF_COMMON_ONLY_TO, toFile)
+                numDiffFileOnlyTo += 1
+                Continue For
+            End If
+            ' 同期の場合はtoのファイルを削除
             Try
                 My.Computer.FileSystem.DeleteFile(toFile, FileIO.UIOption.OnlyErrorDialogs, FileIO.RecycleOption.SendToRecycleBin)
                 logWriter.WriteLine(MSG_SYNC_COMMON_DELETED, toFile)
@@ -448,8 +482,8 @@ Public Class FolderSync
         End If
         ' 差分用同一フォルダ無し
         If Not doSync Then
-            logWriter.WriteLine(MSG_DIFF_COMMON_SAME_NOT_FOUND, toFolder)
-            numDiffFolderSameNotFound += 1
+            logWriter.WriteLine(MSG_DIFF_COMMON_ONLY_FROM, toFolder)
+            numDiffFolderOnlyFrom += 1
             Exit Sub
         End If
         ' 同期フォルダ作成
@@ -466,6 +500,10 @@ Public Class FolderSync
 
     ' フォルダ属性、日付をコピー
     Private Sub CopyFolderAttributes(ByVal fromFolder As String, ByVal toFolder As String)
+        ' 差分取得の場合はなにもしない
+        If Not doSync Then
+            Exit Sub
+        End If
         Try
             ' 属性
             File.SetAttributes(toFolder, File.GetAttributes(fromFolder))
